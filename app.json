@@ -72,6 +72,12 @@
           "template": "add_devices"
         }
       ],
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA"
+        ]
+      },
       "id": "sensor",
       "settings": [
         {
@@ -155,6 +161,12 @@
           "template": "add_devices"
         }
       ],
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA"
+        ]
+      },
       "id": "tune",
       "settings": [
         {
