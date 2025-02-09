@@ -1,0 +1,184 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "se.ngenic.tune",
+  "version": "1.0.0",
+  "compatibility": ">=12.2.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Ngenic Tune"
+  },
+  "description": {
+    "en": "Smart control of house heat pumps.",
+    "sv": "Smart styrning av husvärmepumpar."
+  },
+  "category": [
+    "climate"
+  ],
+  "brandColor": "#F9B12A",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Simon Andersson",
+    "email": "gnaget74@gmail.com"
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Sensor"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_temperature",
+        "measure_humidity",
+        "measure_battery",
+        "measure_signal_strength"
+      ],
+      "capabilitiesOptions": {
+        "measure_signal_strength": {
+          "units": "%",
+          "decimals": 0,
+          "min": 0,
+          "max": 100
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/sensor/assets/images/small.png",
+        "large": "/drivers/sensor/assets/images/large.png",
+        "xlarge": "/drivers/sensor/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "sensor",
+      "settings": [
+        {
+          "id": "active_control",
+          "type": "checkbox",
+          "value": true,
+          "label": {
+            "en": "Include in measurement",
+            "sv": "Styr mot denna enhet"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Tune"
+      },
+      "class": "thermostat",
+      "capabilities": [
+        "target_temperature",
+        "measure_temperature",
+        "measure_temperature.outside",
+        "measure_temperature.control",
+        "measure_temperature.setpoint",
+        "measure_battery",
+        "measure_signal_strength"
+      ],
+      "capabilitiesOptions": {
+        "measure_signal_strength": {
+          "units": "%",
+          "decimals": 0,
+          "min": 0,
+          "max": 100
+        },
+        "measure_temperature.outside": {
+          "title": {
+            "en": "Outside Temperature",
+            "sv": "Utomhustemperatur"
+          }
+        },
+        "measure_temperature.control": {
+          "title": {
+            "en": "Control Value",
+            "sv": "Kontrollvärde"
+          }
+        },
+        "measure_temperature.setpoint": {
+          "title": {
+            "en": "Setpoint Value",
+            "sv": "Börvärde"
+          },
+          "decimals": 2,
+          "step": 0.1
+        },
+        "target_temperature": {
+          "decimals": 1,
+          "step": 0.5
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/tune/assets/images/small.png",
+        "large": "/drivers/tune/assets/images/large.png",
+        "xlarge": "/drivers/tune/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "tune",
+      "settings": [
+        {
+          "id": "control_on_spot_price",
+          "type": "checkbox",
+          "value": true,
+          "label": {
+            "en": "Control on spot price",
+            "sv": "Aktivera elprisstyrning"
+          }
+        },
+        {
+          "id": "spot_price_factor_index",
+          "type": "number",
+          "value": 50,
+          "label": {
+            "en": "Spot price factor index",
+            "sv": "Nivå för elprisstyrning"
+          },
+          "min": 0,
+          "max": 100,
+          "units": "%"
+        }
+      ]
+    }
+  ]
+}

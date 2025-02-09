@@ -1,0 +1,65 @@
+{
+  "name": {
+    "en": "Tune"
+  },
+  "class": "thermostat",
+  "capabilities": [
+    "target_temperature",
+    "measure_temperature",
+    "measure_temperature.outside",
+    "measure_temperature.control",
+    "measure_temperature.setpoint",
+    "measure_battery",
+    "measure_signal_strength"
+  ],
+  "capabilitiesOptions": {
+    "measure_signal_strength": {
+      "units": "%",
+      "decimals": 0,
+      "min": 0,
+      "max": 100
+    },
+    "measure_temperature.outside": {
+      "title": { "en": "Outside Temperature",
+                 "sv": "Utomhustemperatur" }
+    },
+    "measure_temperature.control": {
+      "title": { "en": "Control Value",
+                 "sv": "Kontrollvärde" }
+    },
+    "measure_temperature.setpoint": {
+      "title": { "en": "Setpoint Value",
+                 "sv": "Börvärde" },
+      "decimals": 2,
+      "step": 0.1
+    },
+    "target_temperature": {
+      "decimals": 1,
+      "step": 0.5
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

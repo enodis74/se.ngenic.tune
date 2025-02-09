@@ -1,0 +1,19 @@
+[
+    {
+        "id": "control_on_spot_price",
+        "type": "checkbox",
+        "value": true,
+        "label": {"en": "Control on spot price",
+                  "sv": "Aktivera elprisstyrning"}
+    },
+    {
+        "id": "spot_price_factor_index",
+        "type": "number",
+        "value": 50,
+        "label": {"en": "Spot price factor index",
+                  "sv": "Nivå för elprisstyrning"},
+        "min": 0,
+        "max": 100,
+        "units": "%"
+    }
+]
