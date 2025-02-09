@@ -10,7 +10,7 @@ module.exports = class MyApp extends Homey.App {
    * onInit is called when the app is initialized.
    */
   async onInit() {
-    this.log('MyApp has been initialized');
+    this.log('Ngenic Tune has been initialized');
     NgenicTunesClient.setAccessToken(this.homey.settings.get('accessToken'));
 
     this.homey.settings.on('set', (key) => {

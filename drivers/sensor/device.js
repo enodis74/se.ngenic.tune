@@ -37,25 +37,20 @@ module.exports = class MySensorDevice extends Homey.Device {
     this.updateState();
 
     this.homey.setTimeout(() => {
-      console.log('Initial delay passed');
+      this.log('Initial delay passed');
     
       // Start the interval
       this.interval = this.homey.setInterval(() => {
         this.updateState();
       }, 300000);
     }, NgenicTunesClient.getInitialDelay()*1000*60);
-/*
-    this.interval = this.homey.setInterval(() => {
-      this.updateState();
-    }, 300000);
-*/
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('MyDevice has been added');
+    this.log('Sensor device has been added');
   }
 
   /**
@@ -78,14 +73,14 @@ module.exports = class MySensorDevice extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name) {
-    this.log('MyDevice was renamed');
+    this.log('Sensor device was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log('MyDevice has been deleted');
+    this.log('Sensor device has been deleted');
   }
 
 };

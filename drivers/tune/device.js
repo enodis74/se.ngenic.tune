@@ -45,18 +45,14 @@ module.exports = class MyTuneDevice extends Homey.Device {
     this.updateState();
     
     this.homey.setTimeout(() => {
-      console.log('Initial delay passed');
+      this.log('Initial delay passed');
     
       // Start the interval
       this.interval = this.homey.setInterval(() => {
         this.updateState();
       }, 300000);
     }, NgenicTunesClient.getInitialDelay()*1000*60);
-/*
-    this.interval = this.homey.setInterval(() => {
-      this.updateState();
-    }, 300000);
-*/    
+
     this.registerCapabilityListener('target_temperature', async (value) => {
       await NgenicTunesClient.setTargetTemperature(this.getData().id, value);
     });
