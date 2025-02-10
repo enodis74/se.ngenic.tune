@@ -7,23 +7,28 @@ const NgenicTunesClient = require('../../lib/NgenicTunesClient');
 module.exports = class MySensorDevice extends Homey.Device {
 
   async updateState() {
-    const activeControl = await NgenicTunesClient.getActiveControl(this.getData().tuneId, this.getData().id);
-    await this.setSettings({'active_control': activeControl});
+    try {
+      const activeControl = await NgenicTunesClient.getActiveControl(this.getData().tuneId, this.getData().id);
+      await this.setSettings({'active_control': activeControl});
 
-    const temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-    this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
-    
-    const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
-    this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
+      const temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
+      this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
+      
+      const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
+      this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
 
-    const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
+      const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
 
-    if (nodeStatus !== undefined) {
-      this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
-      this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
+      if (nodeStatus !== undefined) {
+        this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
+        this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
+      }
+
+      this.log('updateState completed');
     }
-
-    this.log('updateState completed');
+    catch (error) {
+      this.error('Error:', error);
+    }
   }
 
   /**
