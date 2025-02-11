@@ -59,7 +59,11 @@ module.exports = class MyTuneDevice extends Homey.Device {
     }, NgenicTunesClient.getInitialDelay()*1000*60);
 
     this.registerCapabilityListener('target_temperature', async (value) => {
-      await NgenicTunesClient.setTargetTemperature(this.getData().id, value);
+      try {
+        await NgenicTunesClient.setTargetTemperature(this.getData().id, value);
+      } catch (error) {
+        this.error('Error:', error);
+      }
     });
   }
 
