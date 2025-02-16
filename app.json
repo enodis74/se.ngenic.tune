@@ -58,6 +58,36 @@
           }
         ]
       }
+    ],
+    "triggers": [
+      {
+        "id": "measure_temperature.outside_changed",
+        "title": {
+          "en": "Outside Temperature changed",
+          "sv": "Utomhustemperaturen ändrades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "measure_temperature.control_changed",
+        "title": {
+          "en": "Control Value changed",
+          "sv": "Kontrollvärdet ändrades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      }
     ]
   },
   "drivers": [
