@@ -1,0 +1,18 @@
+{
+    "actions": [
+      {
+        "id": "activate-sensor",
+        "title": {
+            "en": "Use this sensor",
+            "sv": "Styr mot denna givare"
+        }
+      },
+      {
+        "id": "deactivate-sensor",
+        "title": {
+            "en": "Don't use this sensor",
+            "sv": "Styr INTE mot denna givare"
+        }
+      }
+    ]
+  }
