@@ -4,40 +4,25 @@ const Homey = require('homey');
 
 const NgenicTunesClient = require('../../lib/NgenicTunesClient');
 
-module.exports = class MySensorDevice extends Homey.Device {
+module.exports = class MyOutdoorSensorDevice extends Homey.Device {
 
   async updateState() {
     try {
-      const activeControl = await NgenicTunesClient.getActiveControl(this.getData().tuneId, this.getData().id);
-      await this.setSettings({'active_control': activeControl});
-
-      const temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-      this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
-      
-      const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
-      this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
-
-      const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
-
-      if (nodeStatus !== undefined) {
-        this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
-        this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
-      }
-
-      this.log('updateState completed');
+      const outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
+      this.setCapabilityValue('measure_temperature', outsideTemperatureMeasurement.value);
     }
     catch (error) {
       this.error('Error:', error);
     }
+
+    this.log('updateState completed');
   }
 
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log('Sensor device has been initialized');
-    this.log('Tune ID:', this.getData().tuneId);
-    this.log('Node ID:', this.getData().id);
+    this.log('Outdoor Sensor device has been initialized');
 
     this.updateState();
 
@@ -55,7 +40,7 @@ module.exports = class MySensorDevice extends Homey.Device {
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('Sensor device has been added');
+    this.log('Outdoor Sensor device has been added');
   }
 
   /**
@@ -67,9 +52,7 @@ module.exports = class MySensorDevice extends Homey.Device {
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    if (changedKeys.includes('active_control')) {
-      await NgenicTunesClient.setActiveControl(this.getData().tuneId, this.getData().id, newSettings.active_control);
-    }
+    this.log('Outdoor Sensor device settings where changed');
   }
 
   /**
@@ -78,14 +61,14 @@ module.exports = class MySensorDevice extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name) {
-    this.log('Sensor device was renamed');
+    this.log('Outdoor Sensor device was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log('Sensor device has been deleted');
+    this.log('Outdoor Sensor device has been deleted');
     clearTimeout(this.timeout);
     clearInterval(this.interval);
   }

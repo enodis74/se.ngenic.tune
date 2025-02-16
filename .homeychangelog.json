@@ -7,5 +7,8 @@
   },
   "1.0.2": {
     "en": "Improved error handling. Added min and max limits for thermostat. Changed icon for Tune driver."
+  },
+  "1.1.0": {
+    "en": "Bug fixes. Added device for outdoor temp sensor. Added flow cards activating/deactivating the use of an indoor sensor. Added flow cards for triggering on outdoor temperature changes and control value changes. Added step-by-step guide for how to set up the access token."
   }
 }

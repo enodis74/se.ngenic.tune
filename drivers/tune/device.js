@@ -49,7 +49,7 @@ module.exports = class MyTuneDevice extends Homey.Device {
     
     this.updateState();
     
-    this.homey.setTimeout(() => {
+    this.timeout = this.homey.setTimeout(() => {
       this.log('Initial delay passed');
     
       // Start the interval
@@ -110,5 +110,7 @@ module.exports = class MyTuneDevice extends Homey.Device {
    */
   async onDeleted() {
     this.log('Tune device has been deleted');
+    clearTimeout(this.timeout);
+    clearInterval(this.interval);
   }
 };
