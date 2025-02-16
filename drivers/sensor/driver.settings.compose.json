@@ -3,7 +3,7 @@
         "id": "active_control",
         "type": "checkbox",
         "value": true,
-        "label": {"en": "Include in measurement",
-                  "sv": "Styr mot denna enhet"}
+        "label": {"en": "Use this sensor",
+                  "sv": "Styr mot denna givare"}
     }
 ]

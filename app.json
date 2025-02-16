@@ -28,6 +28,38 @@
     "name": "Simon Andersson",
     "email": "gnaget74@gmail.com"
   },
+  "flow": {
+    "actions": [
+      {
+        "id": "activate-sensor",
+        "title": {
+          "en": "Use this sensor",
+          "sv": "Styr mot denna givare"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          }
+        ]
+      },
+      {
+        "id": "deactivate-sensor",
+        "title": {
+          "en": "Don't use this sensor",
+          "sv": "Styr INTE mot denna givare"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
@@ -85,8 +117,8 @@
           "type": "checkbox",
           "value": true,
           "label": {
-            "en": "Include in measurement",
-            "sv": "Styr mot denna enhet"
+            "en": "Use this sensor",
+            "sv": "Styr mot denna givare"
           }
         }
       ]
