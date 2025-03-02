@@ -39,16 +39,9 @@ module.exports = class MySensorDevice extends Homey.Device {
     this.log('Tune ID:', this.getData().tuneId);
     this.log('Node ID:', this.getData().id);
 
-    this.updateState();
-
-    this.timeout = this.homey.setTimeout(() => {
-      this.log('Initial delay passed');
-    
-      // Start the interval
-      this.interval = this.homey.setInterval(() => {
-        this.updateState();
-      }, 300000);
-    }, NgenicTunesClient.getInitialDelay()*1000*60);
+    await this.updateState();
+    this.updateStateCallback = this.updateState.bind(this);
+    this.homey.app.registerUpdateCallback(this.updateStateCallback);
   }
 
   /**
@@ -86,8 +79,6 @@ module.exports = class MySensorDevice extends Homey.Device {
    */
   async onDeleted() {
     this.log('Sensor device has been deleted');
-    clearTimeout(this.timeout);
-    clearInterval(this.interval);
+    this.homey.app.unregisterUpdateCallback(this.updateStateCallback);
   }
-
 };

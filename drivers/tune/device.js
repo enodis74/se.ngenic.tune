@@ -47,16 +47,9 @@ module.exports = class MyTuneDevice extends Homey.Device {
   async onInit() {
     this.log('Tune device has been initialized');
     
-    this.updateState();
-    
-    this.timeout = this.homey.setTimeout(() => {
-      this.log('Initial delay passed');
-    
-      // Start the interval
-      this.interval = this.homey.setInterval(() => {
-        this.updateState();
-      }, 300000);
-    }, NgenicTunesClient.getInitialDelay()*1000*60);
+    await this.updateState();
+    this.updateStateCallback = this.updateState.bind(this);
+    this.homey.app.registerUpdateCallback(this.updateStateCallback);
 
     this.registerCapabilityListener('target_temperature', async (value) => {
       try {
@@ -110,7 +103,6 @@ module.exports = class MyTuneDevice extends Homey.Device {
    */
   async onDeleted() {
     this.log('Tune device has been deleted');
-    clearTimeout(this.timeout);
-    clearInterval(this.interval);
+    this.homey.app.unregisterUpdateCallback(this.updateStateCallback);
   }
 };

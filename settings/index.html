@@ -46,6 +46,7 @@
         saveElement.addEventListener("click", function (e) {
           Homey.set("accessToken", accessTokenElement.value, function (err) {
             if (err) return Homey.alert(err);
+            Homey.alert("Settings saved");
           });
         });
       }

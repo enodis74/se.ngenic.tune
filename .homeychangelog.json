@@ -10,5 +10,8 @@
   },
   "1.1.0": {
     "en": "Bug fixes. Added device for outdoor temp sensor. Added flow cards activating/deactivating the use of an indoor sensor. Added flow cards for triggering on outdoor temperature changes and control value changes. Added step-by-step guide for how to set up the access token."
+  },
+  "1.1.1": {
+    "en": "Improved handling of polling the Ngenic API. Changed icons for Tune and Outdoor Temp Sensor drivers."
   }
 }
