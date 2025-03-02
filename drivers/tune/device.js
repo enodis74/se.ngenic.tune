@@ -47,7 +47,7 @@ module.exports = class MyTuneDevice extends Homey.Device {
   async onInit() {
     this.log('Tune device has been initialized');
     
-    this.updateState();
+    await this.updateState();
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
 

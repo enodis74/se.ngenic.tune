@@ -24,7 +24,7 @@ module.exports = class MyOutdoorSensorDevice extends Homey.Device {
   async onInit() {
     this.log('Outdoor Sensor device has been initialized');
 
-    this.updateState();
+    await this.updateState();
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
   }

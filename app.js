@@ -30,10 +30,10 @@ module.exports = class NgenicTunesApp extends Homey.App {
     /**
      * Set up an interval to call the next updateState callback in the deviceList
      */
-    this.interval = this.homey.setInterval(() => {
+    this.interval = this.homey.setInterval(async () => {
       const nextUpdate = this.deviceList.next();
       if (nextUpdate != null) {
-        nextUpdate();
+        await nextUpdate();
       }
     }, NgenicTunesApp.UPDATE_INTERVAL);
   }

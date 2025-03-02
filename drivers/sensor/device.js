@@ -39,7 +39,7 @@ module.exports = class MySensorDevice extends Homey.Device {
     this.log('Tune ID:', this.getData().tuneId);
     this.log('Node ID:', this.getData().id);
 
-    this.updateState();
+    await this.updateState();
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
   }
