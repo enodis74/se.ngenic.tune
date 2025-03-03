@@ -25,7 +25,8 @@ module.exports = class NgenicTunesApp extends Homey.App {
       }
     });
 
-    this.registerFlowCardActions();
+    this.registerSensorFlowCardActions();
+    this.registerTuneFlowCardActions();
 
     /**
      * Set up an interval to call the next updateState callback in the deviceList
@@ -38,42 +39,42 @@ module.exports = class NgenicTunesApp extends Homey.App {
     }, NgenicTunesApp.UPDATE_INTERVAL);
   }
 
-/**
- * registerUpdateCallback registers a callback function that will be called
- * when an updateState timeout occurs.
- * 
- * @param {Function} callback - The callback function to register.
- */
-registerUpdateCallback(callback) {
-  if (typeof callback === 'function') {
-    this.deviceList.add(callback);
-  } else {
-    this.error('Error: Callback is not a function');
+  /**
+   * registerUpdateCallback registers a callback function that will be called
+   * when an updateState timeout occurs.
+   * 
+   * @param {Function} callback - The callback function to register.
+   */
+  registerUpdateCallback(callback) {
+    if (typeof callback === 'function') {
+      this.deviceList.add(callback);
+    } else {
+      this.error('Error: Callback is not a function');
+    }
   }
-}
-
-/**
- * unregisterUpdateCallback unregisters a previously registered update callback.
- * 
- * @param {Function} callback - The callback function to unregister.
- */
-unregisterUpdateCallback(callback) {
-  if (typeof callback === 'function') {
-    this.deviceList.remove(callback);
-  } else {
-    this.error('Error: Callback is not a function');
-  }
-}
 
   /**
-   * registerFlowCardActions registers the run listeners for the for the flow
+   * unregisterUpdateCallback unregisters a previously registered update callback.
+   * 
+   * @param {Function} callback - The callback function to unregister.
+   */
+  unregisterUpdateCallback(callback) {
+    if (typeof callback === 'function') {
+      this.deviceList.remove(callback);
+    } else {
+      this.error('Error: Callback is not a function');
+    }
+  }
+
+  /**
+   * registerSensorFlowCardActions registers the run listeners for the for the flow
    * cards that activate or deactivate the use of a specific room sensor for
    * control of the system. Note that the flow card will fail if trying to
    * deactivate a sensor that is the only active sensor for the system.
    * 
    */
-  registerFlowCardActions() {
-    this.homey.flow.getActionCard('activate-sensor').registerRunListener(async (args, state) => {
+  registerSensorFlowCardActions() {
+    this.homey.flow.getActionCard('activate_sensor').registerRunListener(async (args, state) => {
       try {
         await NgenicTunesClient.setActiveControl(args.device.getData().tuneId, args.device.getData().id, true);
         await args.device.setSettings({'active_control': true});
@@ -84,10 +85,39 @@ unregisterUpdateCallback(callback) {
       }
     });
 
-    this.homey.flow.getActionCard('deactivate-sensor').registerRunListener(async (args, state) => {
+    this.homey.flow.getActionCard('deactivate_sensor').registerRunListener(async (args, state) => {
       try {
         await NgenicTunesClient.setActiveControl(args.device.getData().tuneId, args.device.getData().id, false);
         await args.device.setSettings({'active_control': false});
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
+  }
+
+  /**
+   * registerTuneFlowCardActions registers the run listeners for the flow
+   * cards that activate or deactivate the "control on spot price" setting.
+   * 
+   */
+  registerTuneFlowCardActions() {
+    this.homey.flow.getActionCard('activate_control_on_spot_price').registerRunListener(async (args, state) => {
+      try {
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'controlOnSpotPrice': true});
+        await args.device.setSettings({'control_on_spot_price': true});
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
+
+    this.homey.flow.getActionCard('deactivate_control_on_spot_price').registerRunListener(async (args, state) => {
+      try {
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'controlOnSpotPrice': false});
+        await args.device.setSettings({'control_on_spot_price': false});
         return true;
       } catch (error) {
         this.error('Error:', error);

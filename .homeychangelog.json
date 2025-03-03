@@ -13,5 +13,8 @@
   },
   "1.1.1": {
     "en": "Improved handling of polling the Ngenic API. Changed icons for Tune and Outdoor Temp Sensor drivers."
+  },
+  "1.2.0": {
+    "en": "Added flow cards for activating/deactivating control on spot price. Updated README files. Changed license to MIT."
   }
 }

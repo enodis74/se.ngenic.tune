@@ -11,5 +11,18 @@
         "title": {
           "en": "Control Value changed",
           "sv": "Kontrollvärdet ändrades"}
+    }],
+  "actions": [
+    {
+      "id": "activate_control_on_spot_price",
+      "title": {
+        "en": "Activate spot price control",
+        "sv": "Aktivera elprisstyrning"}
+    },
+    {
+      "id": "deactivate_control_on_spot_price",
+      "title": {
+        "en": "Deactivate spot price control",
+        "sv": "Deaktivera elprisstyrning"}
     }]
 }
