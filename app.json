@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "se.ngenic.tune",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -28,6 +28,13 @@
     "name": "Simon Andersson",
     "email": "gnaget74@gmail.com"
   },
+  "bugs": {
+    "url": "https://github.com/enodis74/se.ngenic.tune/issues"
+  },
+  "support": "https://github.com/enodis74/se.ngenic.tune/issues",
+  "source": "https://github.com/enodis74/se.ngenic.tune",
+  "homepage": "https://ngenic.se/en/",
+  "homeyCommunityTopicId": 132064,
   "drivers": [
     {
       "name": {
