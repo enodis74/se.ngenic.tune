@@ -16,5 +16,8 @@
   },
   "1.2.0": {
     "en": "Added flow cards for activating/deactivating control on spot price. Updated README files. Changed license to MIT."
+  },
+  "1.2.1": {
+    "en": "Added support info."
   }
 }
