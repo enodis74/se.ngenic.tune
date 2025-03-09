@@ -99,7 +99,8 @@ module.exports = class NgenicTunesApp extends Homey.App {
 
   /**
    * registerTuneFlowCardActions registers the run listeners for the flow
-   * cards that activate or deactivate the "control on spot price" setting.
+   * cards that activate or deactivate the "control on spot price" setting,
+   * and the card for setting the spot price factor index.
    * 
    */
   registerTuneFlowCardActions() {
@@ -118,6 +119,17 @@ module.exports = class NgenicTunesApp extends Homey.App {
       try {
         await NgenicTunesClient.setControlSettings(args.device.getData().id, {'controlOnSpotPrice': false});
         await args.device.setSettings({'control_on_spot_price': false});
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
+
+    this.homey.flow.getActionCard('set_spot_price_factor_index').registerRunListener(async (args, state) => {
+      try {
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'spotPriceFactorIndex': args.factor_index});
+        await args.device.setSettings({'spot_price_factor_index': args.factor_index});
         return true;
       } catch (error) {
         this.error('Error:', error);

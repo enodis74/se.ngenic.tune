@@ -24,5 +24,28 @@
       "title": {
         "en": "Deactivate spot price control",
         "sv": "Deaktivera elprisstyrning"}
-    }]
+    },
+    {
+      "id": "set_spot_price_factor_index",
+      "title": {
+        "en": "Set spot price factor index",
+        "sv": "Sätt nivå för elprisstyrning"},
+      "titleFormatted": {
+        "en": "Set spot price factor index to [[factor_index]]",
+        "sv": "Sätt nivå för elprisstyrning till [[factor_index]]"},
+      "args": [
+        {
+          "title": {
+            "en": "Spot price factor index",
+            "sv": "Nivå för elprisstyrning"},
+          "name": "factor_index",
+          "type": "range",
+          "label": "%",
+          "min": 0,
+          "max": 100,
+          "step": 1
+        }
+      ]
+    }
+  ]
 }
