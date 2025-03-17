@@ -13,25 +13,25 @@ module.exports = class MyTuneDevice extends Homey.Device {
       await this.setSettings({'spot_price_factor_index': controlSettings.spotPriceFactorIndex});
 
       const targetTemperature = await NgenicTunesClient.getRoomTargetTemperature(this.getData().id);
-      this.setCapabilityValue('target_temperature', targetTemperature);
+      await this.setCapabilityValue('target_temperature', targetTemperature);
 
       const setPoint = await NgenicTunesClient.getNodeSetpoint(this.getData().id, this.getData().controllerId);
-      this.setCapabilityValue('measure_temperature.setpoint', setPoint.value);
+      await this.setCapabilityValue('measure_temperature.setpoint', setPoint.value);
 
       const temperatureMeasurement = await NgenicTunesClient.getNodeProcessValue(this.getData().id, this.getData().controllerId);
-      this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
+      await this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
       
       const outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().id, this.getData().controllerId);
-      this.setCapabilityValue('measure_temperature.outside', outsideTemperatureMeasurement.value);
+      await this.setCapabilityValue('measure_temperature.outside', outsideTemperatureMeasurement.value);
 
       const controlValue = await NgenicTunesClient.getNodeControlValue(this.getData().id, this.getData().controllerId);
-      this.setCapabilityValue('measure_temperature.control', controlValue.value);
+      await this.setCapabilityValue('measure_temperature.control', controlValue.value);
 
       const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().id, this.getData().controllerId);
 
       if (nodeStatus !== undefined) {
-        this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
-        this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
+        await this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
+        await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
       }
 
       this.log('updateState completed');
@@ -47,7 +47,7 @@ module.exports = class MyTuneDevice extends Homey.Device {
   async onInit() {
     this.log('Tune device has been initialized');
     
-    await this.updateState();
+    await this.updateState().catch(error => this.error('Error:', error));
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
 

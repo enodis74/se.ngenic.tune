@@ -9,7 +9,7 @@ module.exports = class MyOutdoorSensorDevice extends Homey.Device {
   async updateState() {
     try {
       const outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-      this.setCapabilityValue('measure_temperature', outsideTemperatureMeasurement.value);
+      await this.setCapabilityValue('measure_temperature', outsideTemperatureMeasurement.value);
     }
     catch (error) {
       this.error('Error:', error);
@@ -24,7 +24,7 @@ module.exports = class MyOutdoorSensorDevice extends Homey.Device {
   async onInit() {
     this.log('Outdoor Sensor device has been initialized');
 
-    await this.updateState();
+    await this.updateState().catch(error => this.error('Error:', error));
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
   }
