@@ -12,16 +12,16 @@ module.exports = class MySensorDevice extends Homey.Device {
       await this.setSettings({'active_control': activeControl});
 
       const temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-      this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
+      await this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
       
       const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
-      this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
+      await this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
 
       const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
 
       if (nodeStatus !== undefined) {
-        this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
-        this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
+        await this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
+        await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
       }
 
       this.log('updateState completed');
@@ -39,7 +39,7 @@ module.exports = class MySensorDevice extends Homey.Device {
     this.log('Tune ID:', this.getData().tuneId);
     this.log('Node ID:', this.getData().id);
 
-    await this.updateState();
+    await this.updateState().catch(error => this.error('Error:', error));
     this.updateStateCallback = this.updateState.bind(this);
     this.homey.app.registerUpdateCallback(this.updateStateCallback);
   }
