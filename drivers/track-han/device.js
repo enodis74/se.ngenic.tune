@@ -6,6 +6,15 @@ const NgenicTunesClient = require('../../lib/NgenicTunesClient');
 
 module.exports = class MyTrackHanDevice extends Homey.Device {
 
+  /*
+   * TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL is used to update
+   * the signal strength every 20th call to updateState, giving an
+   * update frequency of once every 15 minutes.
+   * 
+   * This is to avoid flooding the Ngenic API with requests.
+   */
+  static TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL = 20;
+
   async updateState() {
     try {
       const power = await NgenicTunesClient.getNodePower(this.getData().tuneId, this.getData().id);
@@ -25,6 +34,21 @@ module.exports = class MyTrackHanDevice extends Homey.Device {
 
       const currentL3 = await NgenicTunesClient.getNodeCurrentL3(this.getData().tuneId, this.getData().id);
       await this.setCapabilityValue('measure_current.L3', currentL3.value);
+
+      if (!this.updateCounter || this.updateCounter === 0) {
+        this.updateCounter = 1;
+        const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
+
+        if (nodeStatus !== undefined) {
+          await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus / nodeStatus.maxRadioStatus) * 100);
+          this.log ('Signal strength updated');
+        }
+      } else {
+        this.updateCounter++;
+        if (this.updateCounter >= MyTrackHanDevice.TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL) {
+          this.updateCounter = 0;
+        }
+      }
     }
     catch (error) {
       this.error('Error:', error);

@@ -28,5 +28,8 @@
   },
   "1.4.0": {
     "en": "Added drivers for Track HAN and Track Opto."
+  },
+  "1.4.1": {
+    "en": "Added signal and battery status for Track devices."
   }
 }

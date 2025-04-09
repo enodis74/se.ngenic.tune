@@ -2,14 +2,22 @@
   "name": {
     "en": "Track Opto"
   },
-  "class": "other",
+  "class": "sensor",
   "capabilities": [
-    "measure_power"
+    "measure_power",
+    "measure_battery",
+    "measure_signal_strength"
   ],
   "capabilitiesOptions": {
     "measure_power": {
       "units": "W",
       "decimals": 2
+    },
+    "measure_signal_strength": {
+      "units": "%",
+      "decimals": 0,
+      "min": 0,
+      "max": 100
     }
   },
   "platforms": [
@@ -35,5 +43,8 @@
       "id": "add_devices",
       "template": "add_devices"
     }
-  ]
+  ],
+  "energy": {
+    "batteries": ["AAA", "AAA"]
+  }
 }

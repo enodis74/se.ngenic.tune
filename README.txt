@@ -10,3 +10,5 @@ To get started, you need to get an access token from the Ngenic Developer Portal
  - Tap "Save changes"
 
 Please note that the outdoor sensor represent the heat pump's outdoor sensor, and hence might look different in reality compared to the one in the driver image (depending on the brand of the heat pump).
+
+Sensor values are polled in a round-robin fashion, with one sensor being updated per minute, except for Track sensors that are polled every 45 seconds. This is because the Ngenic API has rate limiting per minute and per hour. Please note that the Ngenic system itself does not provide updated values more often than about every five minutes.
