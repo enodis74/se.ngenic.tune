@@ -2,12 +2,13 @@
   "name": {
     "en": "Track HAN"
   },
-  "class": "other",
+  "class": "sensor",
   "capabilities": [
     "measure_power",
     "measure_current.L1",
     "measure_current.L2",
-    "measure_current.L3"
+    "measure_current.L3",
+    "measure_signal_strength"
   ],
   "capabilitiesOptions": {
     "measure_power": {
@@ -37,6 +38,12 @@
       },
       "units": "A",
       "decimals": 1
+    },
+    "measure_signal_strength": {
+      "units": "%",
+      "decimals": 0,
+      "min": 0,
+      "max": 100
     }
   },
   "platforms": [

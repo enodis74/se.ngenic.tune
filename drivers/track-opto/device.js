@@ -6,11 +6,40 @@ const NgenicTunesClient = require('../../lib/NgenicTunesClient');
 
 module.exports = class MyTrackOptoDevice extends Homey.Device {
 
+  /*
+   * TRACK_OPTO_SIGNAL_STRENGTH_AND_BATTERY_UPDATE_INTERVAL is used
+   * to update the signal strength and battery status every 20th call
+   * to updateState, giving an update frequency of once every 15 minutes.
+   * 
+   * This is to avoid flooding the Ngenic API with requests.
+   */
+  static TRACK_OPTO_SIGNAL_STRENGTH_AND_BATTERY_UPDATE_INTERVAL = 20;
+
   async updateState() {
     try {
       const power = await NgenicTunesClient.getNodePower(this.getData().tuneId, this.getData().id);
       const powerInWatts = power.value * 1000; // Convert kW to W
       await this.setCapabilityValue('measure_power', powerInWatts);
+
+      if (!this.updateCounter || this.updateCounter === 0) {
+        this.updateCounter = 1;
+        const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
+
+        if (nodeStatus !== undefined) {
+          if (nodeStatus.maxBattery > 0) {
+            await this.setCapabilityValue('measure_battery', (nodeStatus.battery / nodeStatus.maxBattery) * 100);
+          } else {
+            await this.setCapabilityValue('measure_battery', nodeStatus.battery);
+          }
+          await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus / nodeStatus.maxRadioStatus) * 100);
+          this.log ('Signal strength and battery status updated');
+        }
+      } else {
+        this.updateCounter++;
+        if (this.updateCounter >= MyTrackOptoDevice.TRACK_OPTO_SIGNAL_STRENGTH_AND_BATTERY_UPDATE_INTERVAL) {
+          this.updateCounter = 0;
+        }
+      }
     }
     catch (error) {
       this.error('Error:', error);
