@@ -1,0 +1,66 @@
+{
+  "name": {
+    "en": "Track HAN"
+  },
+  "class": "other",
+  "capabilities": [
+    "measure_power",
+    "measure_current.L1",
+    "measure_current.L2",
+    "measure_current.L3"
+  ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "units": "W",
+      "decimals": 2
+    },
+    "measure_current.L1": {
+      "title": {
+        "en": "Current L1",
+        "sv": "Ström L1"
+      },
+      "units": "A",
+      "decimals": 1
+    },
+    "measure_current.L2": {
+      "title": {
+        "en": "Current L2",
+        "sv": "Ström L2"
+      },
+      "units": "A",
+      "decimals": 1
+    },
+    "measure_current.L3": {
+      "title": {
+        "en": "Current L3",
+        "sv": "Ström L3"
+      },
+      "units": "A",
+      "decimals": 1
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

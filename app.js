@@ -7,13 +7,15 @@ const CircularList = require('./lib/CircularList');
 module.exports = class NgenicTunesApp extends Homey.App {
 
   static UPDATE_INTERVAL = 60000; // Call a device "updateState" every minute
-
+  static TRACK_UPDATE_INTERVAL = 45000; // Call a track device "updateState" every 45 seconds
+  
   /**
    * onInit is called when the app is initialized.
    */
   async onInit() {
     this.log('Ngenic Tune has been initialized');
     this.deviceList = new CircularList();
+    this.trackList = new CircularList();
     NgenicTunesClient.setAccessToken(this.homey.settings.get('accessToken'));
 
     this.homey.settings.on('set', (key) => {
@@ -41,6 +43,20 @@ module.exports = class NgenicTunesApp extends Homey.App {
         }
       }
     }, NgenicTunesApp.UPDATE_INTERVAL);
+
+    /**
+     * Set up an interval to call the next updateState callback in the trackList
+     */
+    this.interval = this.homey.setInterval(async () => {
+      const nextUpdate = this.trackList.next();
+      if (nextUpdate != null) {
+        try {
+          await nextUpdate(); // Execute the callback
+        } catch (error) {
+          this.error('Error during updateState callback execution:', error);
+        }
+      }
+    }, NgenicTunesApp.TRACK_UPDATE_INTERVAL);
   }
 
   /**
@@ -65,6 +81,33 @@ module.exports = class NgenicTunesApp extends Homey.App {
   unregisterUpdateCallback(callback) {
     if (typeof callback === 'function') {
       this.deviceList.remove(callback);
+    } else {
+      this.error('Error: Callback is not a function');
+    }
+  }
+
+  /**
+   * registerTrackUpdateCallback registers a callback function that will be called
+   * when an updateState timeout occurs for a Track device.
+   * 
+   * @param {Function} callback - The callback function to register.
+   */
+  registerTrackUpdateCallback(callback) {
+    if (typeof callback === 'function') {
+      this.trackList.add(callback);
+    } else {
+      this.error('Error: Callback is not a function');
+    }
+  }
+
+  /**
+   * unregisterTrackUpdateCallback unregisters a previously registered update callback.
+   * 
+   * @param {Function} callback - The callback function to unregister.
+   */
+  unregisterTrackUpdateCallback(callback) {
+    if (typeof callback === 'function') {
+      this.trackList.remove(callback);
     } else {
       this.error('Error: Callback is not a function');
     }
