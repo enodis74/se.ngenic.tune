@@ -31,5 +31,8 @@
   },
   "1.4.1": {
     "en": "Added signal and battery status for Track devices."
+  },
+  "1.4.2": {
+    "en": "Fix of bug causing the Track power measurement to be added to the Homey devices total power consumption."
   }
 }

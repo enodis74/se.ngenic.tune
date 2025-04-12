@@ -45,6 +45,7 @@
     }
   ],
   "energy": {
-    "batteries": ["AAA", "AAA"]
+    "batteries": ["AAA", "AAA"],
+    "cumulative": true
   }
 }
