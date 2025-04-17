@@ -5,6 +5,10 @@
   "class": "sensor",
   "capabilities": [
     "measure_power",
+    "meter_power.imported",
+    "meter_power.imported_since_midnight",
+    "meter_power.imported_this_month",
+    "meter_power.imported_this_year",
     "measure_battery",
     "measure_signal_strength"
   ],
@@ -12,6 +16,30 @@
     "measure_power": {
       "units": "W",
       "decimals": 2
+    },
+    "meter_power.imported": {
+      "title": {
+        "en": "Imported Energy",
+        "sv": "Importerad Energi"
+      }
+    },
+    "meter_power.imported_since_midnight": {
+      "title": {
+        "en": "Imported since midnight",
+        "sv": "Importerat sen midnatt"
+      }
+    },
+    "meter_power.imported_this_month": {
+      "title": {
+        "en": "Imported this month",
+        "sv": "Importerat denna månad"
+      }
+    },
+    "meter_power.imported_this_year": {
+      "title": {
+        "en": "Imported this year",
+        "sv": "Importerat i år"
+      }
     },
     "measure_signal_strength": {
       "units": "%",
@@ -46,6 +74,7 @@
   ],
   "energy": {
     "batteries": ["AAA", "AAA"],
-    "cumulative": true
+    "cumulative": true,
+    "cumulativeImportedCapability": "meter_power.imported"
   }
 }

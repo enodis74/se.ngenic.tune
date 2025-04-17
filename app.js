@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const NgenicTunesClient = require('./lib/NgenicTunesClient');
 const CircularList = require('./lib/CircularList');
+const TimeSupport = require('./lib/TimeSupport');
 
 module.exports = class NgenicTunesApp extends Homey.App {
 
@@ -16,6 +17,7 @@ module.exports = class NgenicTunesApp extends Homey.App {
     this.log('Ngenic Tune has been initialized');
     this.deviceList = new CircularList();
     this.trackList = new CircularList();
+    this.timeSupport = new TimeSupport (this.homey);
     NgenicTunesClient.setAccessToken(this.homey.settings.get('accessToken'));
 
     this.homey.settings.on('set', (key) => {
