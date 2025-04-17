@@ -34,5 +34,8 @@
   },
   "1.4.2": {
     "en": "Fix of bug causing the Track power measurement to be added to the Homey devices total power consumption."
+  },
+  "1.4.3": {
+    "en": "Added imported/exported energy to Track."
   }
 }

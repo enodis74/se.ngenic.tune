@@ -1,30 +1,30 @@
 'use strict';
 
 const Homey = require('homey');
-
 const NgenicTunesClient = require('../../lib/NgenicTunesClient');
+const TimeSupport = require("../../lib/TimeSupport");
 
 module.exports = class MyTrackHanDevice extends Homey.Device {
 
   /*
-   * TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL is used to update
-   * the signal strength every 20th call to updateState, giving an
-   * update frequency of once every 15 minutes.
+   * TRACK_HAN_EXTRA_DATA_UPDATE_INTERVAL is used to update
+   * non-realtime critical capabilities such as signal strength
+   * and imported/exported energy. This data is updated every 20th
+   * call to updateState, giving an update frequency of once every
+   * 15 minutes for systems with maximum one Track device. If more Track
+   * devices are installed all capabilities will be reported more seldom.
    * 
    * This is to avoid flooding the Ngenic API with requests.
    */
-  static TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL = 20;
+  static TRACK_HAN_EXTRA_DATA_UPDATE_INTERVAL = 20;
 
   async updateState() {
     try {
       const power = await NgenicTunesClient.getNodePower(this.getData().tuneId, this.getData().id);
       const powerInWatts = power.value * 1000; // Convert kW to W
-      //await this.setCapabilityValue('measure_power', powerInWatts);
-
       const producedPower = await NgenicTunesClient.getNodeProducedPower(this.getData().tuneId, this.getData().id);
       const producedPowerInWatts = producedPower.value * 1000; // Convert kW to W
       await this.setCapabilityValue('measure_power', powerInWatts - producedPowerInWatts);
-      // await this.setCapabilityValue('measure_power.produced', producedPowerInWatts);
 
       const currentL1 = await NgenicTunesClient.getNodeCurrentL1(this.getData().tuneId, this.getData().id);
       await this.setCapabilityValue('measure_current.L1', currentL1.value);
@@ -35,20 +35,73 @@ module.exports = class MyTrackHanDevice extends Homey.Device {
       const currentL3 = await NgenicTunesClient.getNodeCurrentL3(this.getData().tuneId, this.getData().id);
       await this.setCapabilityValue('measure_current.L3', currentL3.value);
 
-      if (!this.updateCounter || this.updateCounter === 0) {
-        this.updateCounter = 1;
+      if (this.updateCounter === undefined) {
+        this.updateCounter = 0;
+      }
+
+      if (this.updateCounter % MyTrackHanDevice.TRACK_HAN_EXTRA_DATA_UPDATE_INTERVAL === 0) {
+        /*
+         * Update signal strength.
+         */
         const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
 
         if (nodeStatus !== undefined) {
           await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus / nodeStatus.maxRadioStatus) * 100);
           this.log ('Signal strength updated');
         }
-      } else {
-        this.updateCounter++;
-        if (this.updateCounter >= MyTrackHanDevice.TRACK_HAN_SIGNAL_STRENGTH_UPDATE_INTERVAL) {
-          this.updateCounter = 0;
-        }
+
+        /*
+         * Update total imported/exported energy.
+         */
+        let startDate = new Date(0).toISOString(); // Dynamically generate start date
+        let endDate = new Date().toISOString(); // Use the current date as the end date
+
+        this.log('Start date:', startDate);
+        this.log('End date:', endDate);
+        
+        let importedEnergy = await NgenicTunesClient.getNodeImportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.imported', importedEnergy[0].value);
+
+        let exportedEnergy = await NgenicTunesClient.getNodeExportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.exported', exportedEnergy[0].value);
+
+        /*
+         * Update imported/exported energy since midnight.
+         */
+        startDate = this.homey.app.timeSupport.getStartOfDayInUTC();
+
+        importedEnergy = await NgenicTunesClient.getNodeImportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.imported_since_midnight', importedEnergy[0].value);
+        
+        exportedEnergy = await NgenicTunesClient.getNodeExportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.exported_since_midnight', exportedEnergy[0].value);
+
+        /*
+         * Update imported/exported energy this month.
+         */
+        startDate = this.homey.app.timeSupport.getStartOfMonthInUTC();
+        
+        importedEnergy = await NgenicTunesClient.getNodeImportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.imported_this_month', importedEnergy[0].value);
+        
+        exportedEnergy = await NgenicTunesClient.getNodeExportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.exported_this_month', exportedEnergy[0].value);
+
+        /*
+         * Update imported/exported energy this year.
+         */
+        startDate = this.homey.app.timeSupport.getStartOfYearInUTC();
+        
+        importedEnergy = await NgenicTunesClient.getNodeImportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.imported_this_year', importedEnergy[0].value);
+        
+        exportedEnergy = await NgenicTunesClient.getNodeExportedEnergy(this.getData().tuneId, this.getData().id, startDate, endDate);
+        await this.setCapabilityValue('meter_power.exported_this_year', exportedEnergy[0].value);
+        
+        this.log ('Imported/exported energy updated');
       }
+      
+      this.updateCounter++;
     }
     catch (error) {
       this.error('Error:', error);
