@@ -3,6 +3,7 @@
 const Homey = require('homey');
 
 const NgenicTunesClient = require('../../lib/NgenicTunesClient');
+const TimeSupport = require("../../lib/TimeSupport");
 
 module.exports = class MyTuneDevice extends Homey.Device {
 
@@ -32,6 +33,19 @@ module.exports = class MyTuneDevice extends Homey.Device {
       if (nodeStatus !== undefined) {
         await this.setCapabilityValue('measure_battery', (nodeStatus.battery/nodeStatus.maxBattery)*100);
         await this.setCapabilityValue('measure_signal_strength', (nodeStatus.radioStatus/nodeStatus.maxRadioStatus)*100);
+      }
+
+      const setpointSchedules = await NgenicTunesClient.getSetpointSchedules(this.getData().id);
+
+      if (setpointSchedules !== undefined) {
+        let planning = false;
+        for (const schedule of setpointSchedules) {
+          if (this.homey.app.timeSupport.inPlanningPeriod(schedule.startTime, schedule.endTime)) {
+            planning = true;
+            break;
+          }
+        }
+        await this.setCapabilityValue('in_planning', planning);
       }
 
       this.log('updateState completed');

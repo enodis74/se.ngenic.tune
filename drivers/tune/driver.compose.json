@@ -10,7 +10,8 @@
     "measure_temperature.control",
     "measure_temperature.setpoint",
     "measure_battery",
-    "measure_signal_strength"
+    "measure_signal_strength",
+    "in_planning"
   ],
   "capabilitiesOptions": {
     "measure_signal_strength": {

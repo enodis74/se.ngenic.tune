@@ -1,0 +1,9 @@
+{
+  "title": { "en": "Planning Mode",
+             "sv": "Planeringsläge" },
+  "type": "boolean",
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "assets/in_planning.svg"
+}
