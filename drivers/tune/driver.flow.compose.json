@@ -7,11 +7,24 @@
         "sv": "Utomhustemperaturen ändrades"}
     },
     {
-        "id": "measure_temperature.control_changed",
-        "title": {
-          "en": "Control Value changed",
-          "sv": "Kontrollvärdet ändrades"}
-    }],
+      "id": "measure_temperature.control_changed",
+      "title": {
+        "en": "Control Value changed",
+        "sv": "Kontrollvärdet ändrades"}
+    },
+    {
+      "id": "in_planning_true",
+      "title": {
+        "en": "Planning Mode activated",
+        "sv": "Planeringsläget aktiverades"}
+    },
+    {
+      "id": "in_planning_false",
+      "title": {
+        "en": "Planning Mode deactivated",
+        "sv": "Planeringsläget avaktiverades"}
+    }
+  ],
   "actions": [
     {
       "id": "activate_control_on_spot_price",
