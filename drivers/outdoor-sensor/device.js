@@ -5,11 +5,12 @@ const Homey = require('homey');
 const NgenicTunesClient = require('../../lib/NgenicTunesClient');
 
 module.exports = class MyOutdoorSensorDevice extends Homey.Device {
-
+  
   async updateState() {
     try {
-      const outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-      await this.setCapabilityValue('measure_temperature', outsideTemperatureMeasurement.value);
+      this.outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
+      const temperatureOffset = this.getSetting('temperature_offset');
+      await this.setCapabilityValue('measure_temperature', this.outsideTemperatureMeasurement.value + temperatureOffset);
     }
     catch (error) {
       this.error('Error:', error);
@@ -45,7 +46,9 @@ module.exports = class MyOutdoorSensorDevice extends Homey.Device {
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this.log('Outdoor Sensor device settings where changed');
+    if (changedKeys.includes('temperature_offset')) {
+      await this.setCapabilityValue('measure_temperature', this.outsideTemperatureMeasurement.value + newSettings.temperature_offset);
+    }
   }
 
   /**

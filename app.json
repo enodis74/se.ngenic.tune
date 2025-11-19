@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "se.ngenic.tune",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -35,6 +35,214 @@
   "source": "https://github.com/enodis74/se.ngenic.tune",
   "homepage": "https://ngenic.se/en/",
   "homeyCommunityTopicId": 132064,
+  "flow": {
+    "actions": [
+      {
+        "id": "set_outdoor_sensor_temperature_offset",
+        "title": {
+          "en": "Set temperature offset",
+          "sv": "Sätt temperaturjustering"
+        },
+        "titleFormatted": {
+          "en": "Set temperature offset to [[temperature_offset]]",
+          "sv": "Sätt temperaturjustering till [[temperature_offset]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=outdoor-sensor"
+          },
+          {
+            "title": {
+              "en": "Temperature offset",
+              "sv": "Temperaturjustering"
+            },
+            "name": "temperature_offset",
+            "type": "number",
+            "label": "°C",
+            "min": -5,
+            "max": 5,
+            "step": 0.1
+          }
+        ]
+      },
+      {
+        "id": "activate_sensor",
+        "title": {
+          "en": "Activate the sensor",
+          "sv": "Aktivera denna givare"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          }
+        ]
+      },
+      {
+        "id": "deactivate_sensor",
+        "title": {
+          "en": "Deactivate the sensor",
+          "sv": "Deaktivera denna givare"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          }
+        ]
+      },
+      {
+        "id": "set_sensor_temperature_offset",
+        "title": {
+          "en": "Set temperature offset",
+          "sv": "Sätt temperaturjustering"
+        },
+        "titleFormatted": {
+          "en": "Set temperature offset to [[temperature_offset]]",
+          "sv": "Sätt temperaturjustering till [[temperature_offset]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          },
+          {
+            "title": {
+              "en": "Temperature offset",
+              "sv": "Temperaturjustering"
+            },
+            "name": "temperature_offset",
+            "type": "number",
+            "label": "°C",
+            "min": -5,
+            "max": 5,
+            "step": 0.1
+          }
+        ]
+      },
+      {
+        "id": "activate_control_on_spot_price",
+        "title": {
+          "en": "Activate spot price control",
+          "sv": "Aktivera elprisstyrning"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "deactivate_control_on_spot_price",
+        "title": {
+          "en": "Deactivate spot price control",
+          "sv": "Deaktivera elprisstyrning"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "set_spot_price_factor_index",
+        "title": {
+          "en": "Set spot price factor index",
+          "sv": "Sätt nivå för elprisstyrning"
+        },
+        "titleFormatted": {
+          "en": "Set spot price factor index to [[factor_index]]",
+          "sv": "Sätt nivå för elprisstyrning till [[factor_index]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          },
+          {
+            "title": {
+              "en": "Spot price factor index",
+              "sv": "Nivå för elprisstyrning"
+            },
+            "name": "factor_index",
+            "type": "range",
+            "label": "%",
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "id": "measure_temperature.outside_changed",
+        "title": {
+          "en": "Outside Temperature changed",
+          "sv": "Utomhustemperaturen ändrades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "measure_temperature.control_changed",
+        "title": {
+          "en": "Control Value changed",
+          "sv": "Kontrollvärdet ändrades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "in_planning_true",
+        "title": {
+          "en": "Planning Mode activated",
+          "sv": "Planeringsläget aktiverades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      },
+      {
+        "id": "in_planning_false",
+        "title": {
+          "en": "Planning Mode deactivated",
+          "sv": "Planeringsläget avaktiverades"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tune"
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
@@ -68,7 +276,23 @@
           "template": "add_devices"
         }
       ],
-      "id": "outdoor-sensor"
+      "id": "outdoor-sensor",
+      "settings": [
+        {
+          "id": "temperature_offset",
+          "type": "number",
+          "value": 0,
+          "label": {
+            "en": "Temperature offset",
+            "sv": "Temperaturjustering"
+          },
+          "min": -5,
+          "max": 5,
+          "decimals": 1,
+          "step": 0.1,
+          "units": "°C"
+        }
+      ]
     },
     {
       "name": {
@@ -129,6 +353,20 @@
             "en": "Use this sensor",
             "sv": "Styr mot denna givare"
           }
+        },
+        {
+          "id": "temperature_offset",
+          "type": "number",
+          "value": 0,
+          "label": {
+            "en": "Temperature offset",
+            "sv": "Temperaturjustering"
+          },
+          "min": -5,
+          "max": 5,
+          "decimals": 1,
+          "step": 0.1,
+          "units": "°C"
         }
       ]
     },
@@ -456,154 +694,6 @@
       ]
     }
   ],
-  "flow": {
-    "actions": [
-      {
-        "id": "activate_sensor",
-        "title": {
-          "en": "Activate the sensor",
-          "sv": "Aktivera denna givare"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=sensor"
-          }
-        ]
-      },
-      {
-        "id": "deactivate_sensor",
-        "title": {
-          "en": "Deactivate the sensor",
-          "sv": "Deaktivera denna givare"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=sensor"
-          }
-        ]
-      },
-      {
-        "id": "activate_control_on_spot_price",
-        "title": {
-          "en": "Activate spot price control",
-          "sv": "Aktivera elprisstyrning"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      },
-      {
-        "id": "deactivate_control_on_spot_price",
-        "title": {
-          "en": "Deactivate spot price control",
-          "sv": "Deaktivera elprisstyrning"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      },
-      {
-        "id": "set_spot_price_factor_index",
-        "title": {
-          "en": "Set spot price factor index",
-          "sv": "Sätt nivå för elprisstyrning"
-        },
-        "titleFormatted": {
-          "en": "Set spot price factor index to [[factor_index]]",
-          "sv": "Sätt nivå för elprisstyrning till [[factor_index]]"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          },
-          {
-            "title": {
-              "en": "Spot price factor index",
-              "sv": "Nivå för elprisstyrning"
-            },
-            "name": "factor_index",
-            "type": "range",
-            "label": "%",
-            "min": 0,
-            "max": 100,
-            "step": 1
-          }
-        ]
-      }
-    ],
-    "triggers": [
-      {
-        "id": "measure_temperature.outside_changed",
-        "title": {
-          "en": "Outside Temperature changed",
-          "sv": "Utomhustemperaturen ändrades"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      },
-      {
-        "id": "measure_temperature.control_changed",
-        "title": {
-          "en": "Control Value changed",
-          "sv": "Kontrollvärdet ändrades"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      },
-      {
-        "id": "in_planning_true",
-        "title": {
-          "en": "Planning Mode activated",
-          "sv": "Planeringsläget aktiverades"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      },
-      {
-        "id": "in_planning_false",
-        "title": {
-          "en": "Planning Mode deactivated",
-          "sv": "Planeringsläget avaktiverades"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tune"
-          }
-        ]
-      }
-    ]
-  },
   "capabilities": {
     "in_planning": {
       "title": {

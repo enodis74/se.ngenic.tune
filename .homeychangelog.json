@@ -40,5 +40,8 @@
   },
   "1.4.4": {
     "en": "Added planning status to Tune device."
+  },
+  "1.4.5": {
+    "en": "Added offset setting for indoor and outdoor sensors."
   }
 }
