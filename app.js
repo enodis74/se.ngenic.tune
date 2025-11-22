@@ -9,7 +9,7 @@ module.exports = class NgenicTunesApp extends Homey.App {
 
   static UPDATE_INTERVAL = 60000; // Call a device "updateState" every minute
   static TRACK_UPDATE_INTERVAL = 45000; // Call a track device "updateState" every 45 seconds
-  
+
   /**
    * onInit is called when the app is initialized.
    */
@@ -17,7 +17,7 @@ module.exports = class NgenicTunesApp extends Homey.App {
     this.log('Ngenic Tune has been initialized');
     this.deviceList = new CircularList();
     this.trackList = new CircularList();
-    this.timeSupport = new TimeSupport (this.homey);
+    this.timeSupport = new TimeSupport(this.homey);
     NgenicTunesClient.setAccessToken(this.homey.settings.get('accessToken'));
 
     this.homey.settings.on('set', (key) => {
@@ -30,6 +30,7 @@ module.exports = class NgenicTunesApp extends Homey.App {
     });
 
     this.registerSensorFlowCardActions();
+    this.registerOutdoorSensorFlowCardActions();
     this.registerTuneFlowCardActions();
 
     /**
@@ -116,7 +117,27 @@ module.exports = class NgenicTunesApp extends Homey.App {
   }
 
   /**
-   * registerSensorFlowCardActions registers the run listeners for the for the flow
+   * registerOutdoorSensorFlowCardActions registers the run listeners for the flow
+   * card that set the temperature offset.
+   * 
+   */
+  registerOutdoorSensorFlowCardActions() {
+    this.homey.flow.getActionCard('set_outdoor_sensor_temperature_offset').registerRunListener(async (args, state) => {
+      try {
+        const value = Number(args.temperature_offset);
+        if (!Number.isFinite(value)) return false;
+        const offset = Math.max(-5, Math.min(5, value));
+        await args.device.setSettings({ 'temperature_offset': offset });
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
+  }
+
+  /**
+   * registerSensorFlowCardActions registers the run listeners for the flow
    * cards that activate or deactivate the use of a specific room sensor for
    * control of the system. Note that the flow card will fail if trying to
    * deactivate a sensor that is the only active sensor for the system.
@@ -126,7 +147,7 @@ module.exports = class NgenicTunesApp extends Homey.App {
     this.homey.flow.getActionCard('activate_sensor').registerRunListener(async (args, state) => {
       try {
         await NgenicTunesClient.setActiveControl(args.device.getData().tuneId, args.device.getData().id, true);
-        await args.device.setSettings({'active_control': true});
+        await args.device.setSettings({ 'active_control': true });
         return true;
       } catch (error) {
         this.error('Error:', error);
@@ -137,7 +158,20 @@ module.exports = class NgenicTunesApp extends Homey.App {
     this.homey.flow.getActionCard('deactivate_sensor').registerRunListener(async (args, state) => {
       try {
         await NgenicTunesClient.setActiveControl(args.device.getData().tuneId, args.device.getData().id, false);
-        await args.device.setSettings({'active_control': false});
+        await args.device.setSettings({ 'active_control': false });
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
+
+    this.homey.flow.getActionCard('set_sensor_temperature_offset').registerRunListener(async (args, state) => {
+      try {
+        const value = Number(args.temperature_offset);
+        if (!Number.isFinite(value)) return false;
+        const offset = Math.max(-5, Math.min(5, value));
+        await args.device.setSettings({ 'temperature_offset': offset });
         return true;
       } catch (error) {
         this.error('Error:', error);
@@ -155,8 +189,8 @@ module.exports = class NgenicTunesApp extends Homey.App {
   registerTuneFlowCardActions() {
     this.homey.flow.getActionCard('activate_control_on_spot_price').registerRunListener(async (args, state) => {
       try {
-        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'controlOnSpotPrice': true});
-        await args.device.setSettings({'control_on_spot_price': true});
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, { 'controlOnSpotPrice': true });
+        await args.device.setSettings({ 'control_on_spot_price': true });
         return true;
       } catch (error) {
         this.error('Error:', error);
@@ -166,8 +200,8 @@ module.exports = class NgenicTunesApp extends Homey.App {
 
     this.homey.flow.getActionCard('deactivate_control_on_spot_price').registerRunListener(async (args, state) => {
       try {
-        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'controlOnSpotPrice': false});
-        await args.device.setSettings({'control_on_spot_price': false});
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, { 'controlOnSpotPrice': false });
+        await args.device.setSettings({ 'control_on_spot_price': false });
         return true;
       } catch (error) {
         this.error('Error:', error);
@@ -177,8 +211,8 @@ module.exports = class NgenicTunesApp extends Homey.App {
 
     this.homey.flow.getActionCard('set_spot_price_factor_index').registerRunListener(async (args, state) => {
       try {
-        await NgenicTunesClient.setControlSettings(args.device.getData().id, {'spotPriceFactorIndex': args.factor_index});
-        await args.device.setSettings({'spot_price_factor_index': args.factor_index});
+        await NgenicTunesClient.setControlSettings(args.device.getData().id, { 'spotPriceFactorIndex': args.factor_index });
+        await args.device.setSettings({ 'spot_price_factor_index': args.factor_index });
         return true;
       } catch (error) {
         this.error('Error:', error);

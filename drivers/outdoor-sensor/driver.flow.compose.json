@@ -1,21 +1,7 @@
 {
   "actions": [
     {
-      "id": "activate_sensor",
-      "title": {
-        "en": "Activate the sensor",
-        "sv": "Aktivera denna givare"
-      }
-    },
-    {
-      "id": "deactivate_sensor",
-      "title": {
-        "en": "Deactivate the sensor",
-        "sv": "Deaktivera denna givare"
-      }
-    },
-    {
-      "id": "set_sensor_temperature_offset",
+      "id": "set_outdoor_sensor_temperature_offset",
       "title": {
         "en": "Set temperature offset",
         "sv": "Sätt temperaturjustering"

@@ -1,12 +1,5 @@
 [
     {
-        "id": "active_control",
-        "type": "checkbox",
-        "value": true,
-        "label": {"en": "Use this sensor",
-                  "sv": "Styr mot denna givare"}
-    },
-    {
         "id": "temperature_offset",
         "type": "number",
         "value": 0,

@@ -11,8 +11,9 @@ module.exports = class MySensorDevice extends Homey.Device {
       const activeControl = await NgenicTunesClient.getActiveControl(this.getData().tuneId, this.getData().id);
       await this.setSettings({'active_control': activeControl});
 
-      const temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
-      await this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
+      this.temperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().tuneId, this.getData().id);
+      const temperatureOffset = this.getSetting('temperature_offset');
+      await this.setCapabilityValue('measure_temperature', this.temperatureMeasurement.value + temperatureOffset);
       
       const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
       await this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
@@ -62,6 +63,10 @@ module.exports = class MySensorDevice extends Homey.Device {
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     if (changedKeys.includes('active_control')) {
       await NgenicTunesClient.setActiveControl(this.getData().tuneId, this.getData().id, newSettings.active_control);
+    }
+
+    if (changedKeys.includes('temperature_offset')) {
+      await this.setCapabilityValue('measure_temperature', this.temperatureMeasurement.value + newSettings.temperature_offset);
     }
   }
 
