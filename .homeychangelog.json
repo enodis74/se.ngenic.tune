@@ -43,5 +43,8 @@
   },
   "1.4.5": {
     "en": "Added offset setting for indoor and outdoor sensors."
+  },
+  "1.4.6": {
+    "en": "Added offset setting for humidity in indoor sensors."
   }
 }

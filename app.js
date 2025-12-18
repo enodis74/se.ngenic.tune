@@ -178,6 +178,19 @@ module.exports = class NgenicTunesApp extends Homey.App {
         return false;
       }
     });
+
+    this.homey.flow.getActionCard('set_sensor_humidity_offset').registerRunListener(async (args, state) => {
+      try {
+        const value = Number(args.humidity_offset);
+        if (!Number.isFinite(value)) return false;
+        const offset = Math.max(-20, Math.min(20, Math.round(value)));
+        await args.device.setSettings({ 'humidity_offset': offset });
+        return true;
+      } catch (error) {
+        this.error('Error:', error);
+        return false;
+      }
+    });
   }
 
   /**

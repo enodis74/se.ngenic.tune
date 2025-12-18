@@ -1,6 +1,6 @@
 {
   "id": "se.ngenic.tune",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -10,8 +10,8 @@
     "en": "Ngenic Tune"
   },
   "description": {
-    "en": "Smart control of house heat pumps.",
-    "sv": "Smart styrning av husvärmepumpar."
+    "en": "Smart control of house heat pumps and district heating.",
+    "sv": "Smart styrning av husvärmepumpar och fjärrvärme."
   },
   "category": [
     "climate"

@@ -15,8 +15,10 @@ module.exports = class MySensorDevice extends Homey.Device {
       const temperatureOffset = this.getSetting('temperature_offset');
       await this.setCapabilityValue('measure_temperature', this.temperatureMeasurement.value + temperatureOffset);
       
-      const humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
-      await this.setCapabilityValue('measure_humidity', humidityMeasurement.value);
+      this.humidityMeasurement = await NgenicTunesClient.getNodeHumidity(this.getData().tuneId, this.getData().id);
+      const humidityOffset = this.getSetting('humidity_offset');
+      const adjustedHumidity = Math.min(100, Math.max(0, this.humidityMeasurement.value + humidityOffset));
+      await this.setCapabilityValue('measure_humidity', adjustedHumidity);
 
       const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().tuneId, this.getData().id);
 
@@ -67,6 +69,11 @@ module.exports = class MySensorDevice extends Homey.Device {
 
     if (changedKeys.includes('temperature_offset')) {
       await this.setCapabilityValue('measure_temperature', this.temperatureMeasurement.value + newSettings.temperature_offset);
+    }
+
+    if (changedKeys.includes('humidity_offset')) {
+      const adjustedHumidity = Math.min(100, Math.max(0, this.humidityMeasurement.value + newSettings.humidity_offset));
+      await this.setCapabilityValue('measure_humidity', adjustedHumidity);
     }
   }
 

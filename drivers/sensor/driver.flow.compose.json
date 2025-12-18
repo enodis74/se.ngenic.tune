@@ -38,6 +38,31 @@
           "step": 0.1
         }
       ]
+    },
+    {
+      "id": "set_sensor_humidity_offset",
+      "title": {
+        "en": "Set humidity offset",
+        "sv": "Sätt luftfuktighetsjustering"
+      },
+      "titleFormatted": {
+        "en": "Set humidity offset to [[humidity_offset]]",
+        "sv": "Sätt luftfuktighetsjustering till [[humidity_offset]]"
+      },
+      "args": [
+        {
+          "title": {
+            "en": "Humidity offset",
+            "sv": "Luftfuktighetsjustering"
+          },
+          "name": "humidity_offset",
+          "type": "number",
+          "label": "%",
+          "min": -20,
+          "max": 20,
+          "step": 1
+        }
+      ]
     }
   ]
 }

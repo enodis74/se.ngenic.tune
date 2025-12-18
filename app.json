@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "se.ngenic.tune",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -11,8 +11,8 @@
     "en": "Ngenic Tune"
   },
   "description": {
-    "en": "Smart control of house heat pumps.",
-    "sv": "Smart styrning av husvärmepumpar."
+    "en": "Smart control of house heat pumps and district heating.",
+    "sv": "Smart styrning av husvärmepumpar och fjärrvärme."
   },
   "category": [
     "climate"
@@ -122,6 +122,36 @@
             "min": -5,
             "max": 5,
             "step": 0.1
+          }
+        ]
+      },
+      {
+        "id": "set_sensor_humidity_offset",
+        "title": {
+          "en": "Set humidity offset",
+          "sv": "Sätt luftfuktighetsjustering"
+        },
+        "titleFormatted": {
+          "en": "Set humidity offset to [[humidity_offset]]",
+          "sv": "Sätt luftfuktighetsjustering till [[humidity_offset]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sensor"
+          },
+          {
+            "title": {
+              "en": "Humidity offset",
+              "sv": "Luftfuktighetsjustering"
+            },
+            "name": "humidity_offset",
+            "type": "number",
+            "label": "%",
+            "min": -20,
+            "max": 20,
+            "step": 1
           }
         ]
       },
@@ -367,6 +397,20 @@
           "decimals": 1,
           "step": 0.1,
           "units": "°C"
+        },
+        {
+          "id": "humidity_offset",
+          "type": "number",
+          "value": 0,
+          "label": {
+            "en": "Humidity offset",
+            "sv": "Luftfuktighetsjustering"
+          },
+          "min": -20,
+          "max": 20,
+          "decimals": 0,
+          "step": 1,
+          "units": "%"
         }
       ]
     },
