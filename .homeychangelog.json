@@ -46,5 +46,8 @@
   },
   "1.4.6": {
     "en": "Added offset setting for humidity in indoor sensors."
+  },
+  "1.4.7": {
+    "en": "Fixed bug causing Tune device updates stopping when temperature measurements are missing. Available values now continue to update."
   }
 }

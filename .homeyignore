@@ -1,0 +1,5 @@
+diagnostics/
+scripts/
+tests/
+AGENTS.md
+*.code-workspace

@@ -7,6 +7,22 @@ const TimeSupport = require("../../lib/TimeSupport");
 
 module.exports = class MyTuneDevice extends Homey.Device {
 
+  async updateMeasurement(capability, getMeasurement) {
+    let measurement;
+    try {
+      measurement = await getMeasurement();
+    } catch (error) {
+      if (error.code !== 'NGENIC_NO_CONTENT') throw error;
+      this.log(`No measurement available for ${capability} (HTTP 204)`);
+    }
+
+    // Clear stale values when the API has no measurement; zero is a valid value.
+    const value = measurement && measurement.hasValue !== false && Number.isFinite(measurement.value)
+      ? measurement.value
+      : null;
+    await this.setCapabilityValue(capability, value);
+  }
+
   async updateState() {
     try {
       const controlSettings = await NgenicTunesClient.getControlSettings(this.getData().id);
@@ -16,17 +32,17 @@ module.exports = class MyTuneDevice extends Homey.Device {
       const targetTemperature = await NgenicTunesClient.getRoomTargetTemperature(this.getData().id);
       await this.setCapabilityValue('target_temperature', targetTemperature);
 
-      const setPoint = await NgenicTunesClient.getNodeSetpoint(this.getData().id, this.getData().controllerId);
-      await this.setCapabilityValue('measure_temperature.setpoint', setPoint.value);
+      await this.updateMeasurement('measure_temperature.setpoint', () =>
+        NgenicTunesClient.getNodeSetpoint(this.getData().id, this.getData().controllerId));
 
-      const temperatureMeasurement = await NgenicTunesClient.getNodeProcessValue(this.getData().id, this.getData().controllerId);
-      await this.setCapabilityValue('measure_temperature', temperatureMeasurement.value);
+      await this.updateMeasurement('measure_temperature', () =>
+        NgenicTunesClient.getNodeProcessValue(this.getData().id, this.getData().controllerId));
       
-      const outsideTemperatureMeasurement = await NgenicTunesClient.getNodeTemperature(this.getData().id, this.getData().controllerId);
-      await this.setCapabilityValue('measure_temperature.outside', outsideTemperatureMeasurement.value);
+      await this.updateMeasurement('measure_temperature.outside', () =>
+        NgenicTunesClient.getNodeTemperature(this.getData().id, this.getData().controllerId));
 
-      const controlValue = await NgenicTunesClient.getNodeControlValue(this.getData().id, this.getData().controllerId);
-      await this.setCapabilityValue('measure_temperature.control', controlValue.value);
+      await this.updateMeasurement('measure_temperature.control', () =>
+        NgenicTunesClient.getNodeControlValue(this.getData().id, this.getData().controllerId));
 
       const nodeStatus = await NgenicTunesClient.getNodeStatus(this.getData().id, this.getData().controllerId);
 
